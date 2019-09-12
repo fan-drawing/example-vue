@@ -4,15 +4,10 @@
     <div class="lrlayout-absolute">
       <div class="left-nav-absolute">
         <ul class="clearfix">
-          <li class="active">
-            全部任务
-          </li>
-          <li>
-            进行中的任务
-          </li>
-          <li>
-            已结束的任务
-          </li>
+          <router-link to="/management/" tag="li">全部任务</router-link>
+          <router-link to="/management/containue" tag="li">进行中的任务</router-link>
+          <router-link to="/management/ended" tag="li">已结束的任务</router-link>
+          
         </ul>
       </div>
       <tablemanage/>

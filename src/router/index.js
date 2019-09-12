@@ -31,6 +31,11 @@ export default new Router({
       component:management
     },
     {
+      path:'/management/:type',
+      name:'management',
+      component:management
+    },
+    {
       path:'/statistics',
       name:'statistics',
       component:statistics

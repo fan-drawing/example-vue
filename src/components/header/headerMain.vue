@@ -5,7 +5,7 @@
     <li class="link" style="cursor: not-allowed;">
       策略管理
     </li>
-    <router-link to="/management" class="link" tag="li">任务管理</router-link>
+    <router-link to="/management/" :class="$route.name=='management'?'active':''" class="link" tag="li">任务管理</router-link>
     <router-link to="/statistics" class="link" tag="li">数据统计</router-link>
   </ul>
   <div class="use-model">
