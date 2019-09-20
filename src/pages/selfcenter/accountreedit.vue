@@ -3,20 +3,20 @@
   <div class="shadow"></div>
   <div class="tan-block manage-edit">
     <div class="tan-header">
-      <h4>添加账户弹窗</h4>
+      <h4>修改账户信息{{itemIndex}}</h4>
       <i class="el-icon-close tan-close" @click="close"></i>
     </div>
     
     <el-form :model="accountData" :label-position="'left'" label-width="100px" :rules="rules" ref="accountForm" class="tan-mains">
-      <el-form-item prop="name" label="账户名称：" class="my-input-suffix">
+      <el-form-item prop="Account" label="账户名称：" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入"
-            v-model="accountData.name">
+            v-model="accountData.Account">
           </el-input>
         </div>
       </el-form-item>
-      <el-form-item prop="password" label="账户密码：" class="my-input-suffix">
+       <!-- <el-form-item prop="password" label="账户密码：" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入账户密码"
@@ -24,26 +24,25 @@
             v-model="accountData.password">
           </el-input>
         </div>
-      </el-form-item>
-      
-      <el-form-item prop="brokerName" label="经纪公司：" class="my-input-suffix">
+      </el-form-item> -->
+      <el-form-item prop="BrokerName" label="经纪公司：" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入公司"
-            v-model="accountData.brokerName">
+            v-model="accountData.BrokerName">
           </el-input>
         </div>
       </el-form-item>
-      <el-form-item prop="brokerID" label="公司代码：" class="my-input-suffix" style="margin-bottom:40px;">
+      <el-form-item prop="BrokerID" label="公司代码：" class="my-input-suffix" style="margin-bottom:40px;">
         <div>
           <el-input
             placeholder="请输入公司ID"
-            v-model="accountData.brokerID">
+            v-model="accountData.BrokerID">
           </el-input>
         </div>
       </el-form-item>
 
-      <el-button type="primary" @click="sendAccount('accountForm')" class="addsure">确认添加</el-button>
+      <el-button type="primary" @click="sendAccount('accountForm')" class="addsure">确认修改</el-button>
     </el-form>
   </div>
 </div>
@@ -51,27 +50,28 @@
 
 <script>
 export default {
-  name: 'accountedit',
+  name: 'accountreedit',
+  props:['itemmsg','itemIndex'],
+  computed:{
+    accountData(){
+      return this.itemmsg;
+    }
+  },
   data () {
     return {
       input1:"",
-      accountData:{
-        name:"146195",
-        password:"xiashine",
-        brokerName:"申银万国期货",
-        brokerID:"12345",
-      },
+      
       rules:{
-        name:[
+        Account:[
           { required: true, message: '请输入账户名称', trigger: 'blur' },
         ],
         password:[
           { required: true, message: '请输入账户密码', trigger: 'blur' },
         ],
-        brokerName:[
+        BrokerName:[
           { required: true, message: '请输入公司名称', trigger: 'blur' },
         ],
-        brokerID:[
+        BrokerID:[
           { required: true, message: '经纪公司ID', trigger: 'blur' },
         ],
       }
@@ -79,7 +79,7 @@ export default {
   },
   methods:{
     close(){
-      this.$emit('closeTan',true)
+      this.$emit('closeTanEdit',true)
     },
     handleCheckAllChange(val) {
       this.checkedCities = val ? cityOptions : [];
@@ -91,23 +91,15 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
     },
     sendAccount(formName){
-      // this.$refs[formName].validateField(['name','password','email','phone','surepass'],(errorMessage)=>{
-      //   console.log(errorMessage=="")
-      // })
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const data =  this.accountData;
-          
-          this.$post("/accounts/add",data).then(res=>{
+          const data =  {"name": this.accountData.Account,"brokerName":this.accountData.BrokerName,"brokerID":this.accountData.BrokerID,"ID":this.accountData.ID+""}  
+          this.$post("/accounts/update",data).then(res=>{
             if(res.errno==='1'){
-              let msg = res.data;
-              //初始化新账户
-              msg.State = '1';
-              msg.Instruments =[];
-              msg.visible = false;
-              this.$emit('closeTan',msg)
+              this.accountData.CreateTime = res.data.UpdateTime;
+              this.$emit('closeTanEdit',{data:this.accountData,index:this.itemIndex});
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
             }
           }) 
           

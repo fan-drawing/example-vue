@@ -4,18 +4,15 @@
     <div class="lrlayout-absolute">
       <div class="left-nav-absolute">
         <ul class="clearfix">
-          <li class="active">
-            成交合约
-          </li>
-          <li>
-            收益统计
-          </li>
+          
+          <router-link to="/statistics/" :class="$route.name=='statisticscontract'?'active':''" tag="li">成交合约</router-link>
+          <router-link to="/statistics/income" tag="li" :class="$route.name=='statisticsincome'?'active':''">收益统计</router-link>
         </ul>
       </div>
 
-      <statisticslist/>
+      <router-view></router-view>
 
-      <statisticschart/>
+      
     </div>
   </div>  
 </div>
@@ -23,7 +20,6 @@
 </template>
 <script>
 import statisticslist from "./statisticslist.vue"
-import statisticschart from "./statisticschart.vue"
 export default {
   name: 'management',
   data () {
@@ -31,7 +27,7 @@ export default {
       
     }
   },
-  components:{statisticslist,statisticschart}
+  components:{statisticslist}
 }
 </script>
 

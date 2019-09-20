@@ -1,24 +1,24 @@
 <template>
 <div class="header_inner clearfix">
+  <div class="logo-web"></div>
   <ul class="clearfix nav-list">
     <router-link to="/index" class="link" tag="li">行情列表</router-link>
-    <li class="link" style="cursor: not-allowed;">
-      策略管理
-    </li>
-    <router-link to="/management/" :class="$route.name=='management'?'active':''" class="link" tag="li">任务管理</router-link>
-    <router-link to="/statistics" class="link" tag="li">数据统计</router-link>
+    <router-link to="/treaty" class="link" tag="li">合约管理</router-link>
+    <router-link to="/strategy" class="link" tag="li">策略管理</router-link>
+    <router-link to="/management/all"  :class="/^management/.test($route.name)?'active':''"  class="link" tag="li">任务管理</router-link>
+    <router-link to="/statistics" :class="/^statistics/.test($route.name)?'active':''" class="link" tag="li">数据统计</router-link>
   </ul>
-  <div class="use-model">
-    <span class="user-nickname">Mónica Ribeiro</span>
+  <div class="use-model" v-if="usr!=null">
+    <span class="user-nickname">{{usr.user_name}}</span>
     <div class="user-img">
       <img src="../../assets/user-moren.png" alt="">
     </div>
 
-    <div class="slideNav">
+    <div class="slideNav" v-if="usr!=null">
       <ul class="clearfix">
         <router-link to="/account" class="slide-item" tag="li">账号管理</router-link>
         <router-link to="/account/basemsg" class="slide-item" tag="li">基础设置</router-link>
-        <li class="slide-item">
+        <li class="slide-item" @click="quit">
           登出
         </li>
       </ul>
@@ -32,7 +32,25 @@ export default {
   name: 'headerMain',
   data () {
     return {
-      
+      usr:null,
+    }
+  },
+  mounted(){
+    let cookieUsr = this.$getCookie("umsg",true);
+    if(cookieUsr!=null){
+      this.usr = cookieUsr;
+    }
+  },
+  methods:{
+    quit(){
+      this.$fetch("/sessions/quit").then(res=>{
+          if(res.errno==='1'){
+            this.$delCookie("umsg");
+            this.$router.push({name:'login'})
+          }else{
+                if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              }
+        }) 
     }
   }
 }

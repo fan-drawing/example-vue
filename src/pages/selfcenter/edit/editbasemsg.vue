@@ -3,21 +3,21 @@
       <div class="msg-edit-block">
             <p class="he">用户名称:</p>
             <div class="edit-msg">
-              <span class="value">Mónica Ribeiro</span>
+              <span class="value">{{usr.user_name}}</span>
               <span class="editvalue">修改</span>
             </div>
       </div>
       <div class="msg-edit-block">
             <p class="he">邮箱账号:</p>
             <div class="edit-msg">
-              <span class="value">12225765556@qq.com</span>
+              <span class="value">{{usr.email}}</span>
               <span class="editvalue">修改</span>
             </div>
       </div>
       <div class="msg-edit-block">
             <p class="he">手机号码:</p>
             <div class="edit-msg">
-              <span class="value">15110217819</span>
+              <span class="value">{{usr.phone}}</span>
               <span class="editvalue">修改</span>
             </div>
       </div>
@@ -30,6 +30,14 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      usr:null,
+    }
+  },
+  mounted(){
+    let cookieUsr = this.$getCookie("umsg",true);
+    if(cookieUsr!=null){
+      console.log(cookieUsr)
+      this.usr = cookieUsr;
     }
   }
 }

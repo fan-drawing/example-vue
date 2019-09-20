@@ -1,23 +1,14 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header height="56px" class="header-top">
-        <headerMain/>
-      </el-header>
-      <el-main class="bgcolor">
-        <router-view/>
-      </el-main>
-    </el-container>
-    
+    <router-view/>
   </div>
 </template>
 
 <script>
-import headerMain from "@/components/header/headerMain.vue"
+
 export default {
   
   name: 'App',
-  components:{headerMain}
 }
 </script>
 <style>
@@ -92,11 +83,13 @@ html { overflow-y: scroll;}
 /*超出内容显示省略号*/
 .ellipsis{  max-width: 100%;  white-space: nowrap;  text-overflow:ellipsis;  overflow:hidden;  }
 /*清除浮动*/
+.el-main{min-width:1200px;}
 .clearfix {  *zoom: 1;  }
 .clearfix:before,
 .clearfix:after {  display: table;  line-height: 0;  content: "";  }
 .clearfix:after {  clear: both;  }
 .bgcolor{background:rgba(243, 245, 249, 1);}
+.logo-web{float:left;height:56px;border:1px solid #eee;width:166px;margin-right:34px;}
 .header-top{background:rgba(255,255,255,1);box-shadow:0px 2px 4px 0px rgba(0,0,0,0.06);}
 .containue-cj{width:1200px;margin-left: auto;margin-right: auto;}
 .q-title{color: rgba(36,117,251,1);font-size: 16px;line-height: 50px;}
@@ -146,6 +139,8 @@ html { overflow-y: scroll;}
 .tan-in-group .el-select.two-sp{width:48%;}
 .tan-in-group .el-select{width:100%;margin-top:12px;border-radius: 2px;}
 .tan-in-group .el-select .el-input__inner{height:32px;}
+.tan-in-group .el-input .el-input__inner{height:32px;}
+.tan-in-group .el-input.sp {margin-top:12px;}
 .tan-in-group .el-select .el-input__icon{line-height: 32px;}
 .el-button.addsure{width:140px;height:38px;background:rgba(36,117,251,1);border-radius:4px;margin:0 auto;display: block;}
 .tan-mains .el-date-editor .el-range__icon,.tan-mains .el-date-editor .el-range-separator,.tan-mains .el-date-editor .el-range__close-icon{line-height: 25px;}
@@ -155,7 +150,7 @@ html { overflow-y: scroll;}
 .header-top{z-index: 100;}
 .edit-tan{position:fixed;z-index:100;top:0;left:0;width: 100%;height:100%;}
 .edit-tan .shadow{position: relative;width:100%;height:100%;background:rgba(22,22,24,0.4);}
-.tan-block{width:532px;max-height:532px;background:#fff;position: absolute;left:50%;margin-left:-268px;border-radius:2px;top:20%;}
+.tan-block{width:532px;background:#fff;position: absolute;left:50%;margin-left:-268px;border-radius:2px;top:16%;}
 .tan-header{height:52px;border-bottom:1px solid rgba(22, 22, 24, 0.08);position:relative;}
 .tan-header h4{font-size: 16px;padding-left:30px;line-height: 54px;}
 .tan-close{position: absolute;top:50%;margin-top:-12px;right:30px;font-size: 24px;cursor: pointer;}
@@ -166,11 +161,74 @@ html { overflow-y: scroll;}
 .tan-in-group .el-date-editor .el-range-input{width:50%;}
 .tan-in-group .el-date-editor .el-range__icon,.tan-in-group .el-date-editor .el-range-separator,.tan-in-group .el-date-editor .el-range__close-icon{line-height: 25px;}
 .tan-in-group .title-tan-group:before{content:"";display: inline-block;width:2px;height:10px;background:rgba(36,117,251,1);position: absolute;left:0;top:50%;margin-top:-5px;}
-.my-input-suffix{margin-bottom:24px;height:32px;position: relative;width:364px;margin-left:auto;margin-right: auto;padding-left:70px;}
+.my-input-suffix{margin-bottom:24px;height:32px;position: relative;width:364px;margin-left:auto;margin-right: auto;padding-left:0px;}
 .my-input-suffix .label-input-suffix{position: absolute;width:70px;line-height:32px;height:32px;top:0;left:0;}
 .my-input-suffix .el-input__inner{height:32px;line-height: 32px;border-radius: 2px;}
 .my-input-suffix .el-input__icon{line-height: 32px;}
 .passedit .el-input__inner{background-color:rgba(22,22,24,0.04);border-radius:2px;border:none;}
 .passedit{margin-bottom: 24px;}
 .edit-up{width:320px;height:40px;background:rgba(36,117,251,1);border-radius:2px;display: block;margin-left:auto;margin-right: auto;color:#fff;}
+.login-area>div{width:436px;margin:0 auto}
+.login-area .el-form-item .el-input{margin-bottom:0px;}
+.login-area .el-input{height:44px;margin:0 auto;display:block;}
+.el-form-item{margin-bottom:20px;}
+.login-area .el-input .el-input__inner{height:44px;}
+.login-area .el-input__icon{line-height:44px;}
+.login-btn{width:436px;height:44px;background:linear-gradient(243deg,rgba(61,168,255,1) 0%,rgba(49,127,255,1) 100%);border-radius:4px;display:block;margin-left:auto;margin-right:auto;font-size:14px;color:#fff;}
+.login-btn:focus, .login-btn:hover{color:#fff;}
+.mobile-text{position:relative;margin-bottom:20px;}
+.login-area .mobile-text .el-input{margin-bottom:0px;}
+.code-get{position:absolute;padding-top:4px;padding-bottom:4px;color:#fff; right:12px;top:50%;width:110px;height:28px;background:linear-gradient(243deg,rgba(61,168,255,1) 0%,rgba(49,127,255,1) 100%);border-radius:4px;text-align:center;margin-top:-14px;}
+.code-get:hover,.code-get:focus{color:#fff;}
+.time-back{color:rgba(22,22,24,0.75);display:inline-block;height:20px;right:12px;top:50%;margin-top:-10px;line-height:20px;position:absolute;}
+.time-back em{font-style:normal;font-size:14px;color:#2475FB;padding-right:5px;}
+.step-one .el-form-item__content{margin-left:0px!important;}
+.strategy-edit .el-input__inner{height:32px;line-height:32px;border-radius:2px;float: none;}
+.login-area .el-form{width:436px;margin-left:auto;margin-right:auto;}
+.success-tip .el-button--primary{background:linear-gradient(243deg,rgba(61,168,255,1) 0%,rgba(49,127,255,1) 100%);}
+.baseedit.el-form--label-top .el-form-item__label{font-size: 12px;color: rgba(22,22,24,0.75);line-height: 12px;margin-bottom: 6px;padding-bottom:0px;}
+.el-form-item__error{white-space: nowrap;}
+.strategy .el-form--label-top .el-form-item__label{font-size: 14px;color: rgba(0,0,0,0.85);line-height: 14px;position: relative;padding-left: 8px;margin-bottom: 12px;padding-bottom:0px;padding-left:0px;}
+.el-form.tan-mains .el-form-item{margin-bottom:30px;}
+
+.overflow-two-margin{padding-top:10px;margin-left:-12px;margin-right:-12px;}
+.item-show{width:362px;height:184px;background:rgba(255,255,255,1);border: 1px solid transparent;float:left;margin-left:12px;margin-right:12px;margin-bottom:24px;}
+.edit-strategy{text-align:center;font-size:16px;font-weight:400;color:rgba(0,0,0,0.45);line-height:184px;cursor:pointer;}
+.edit-strategy:hover{border:1px dashed rgba(36,117,251,1);}
+.edit-strategy i{margin-right:10px;}
+.msg-strategy {box-shadow:0px 2px 8px 0px rgba(22,22,24,0.06);border-radius:2px;position:relative;border:1px solid rgba(233,233,233,1);}
+.msg-strategy .bottom-area-action{position:absolute;bottom:0;left:0;width:100%;height:48px;background:rgba(253,253,253,1);left:-1px; border-radius:0px 0px 2px 2px;border:1px solid rgba(233,233,233,1);}
+.bottom-area-action a{cursor:pointer;text-decoration:none!important; float:left;width:50%;height:48px;line-height:48px;display:block;text-align:center;color:rgba(0,0,0,0.45);font-size:14px;}
+.bottom-area-action a.edit{color:#2475FB;}
+.bottom-area-action a.delete:hover{color:#FF3300;}
+.bottom-area-action:after{content:"";width:1px;height:16px;position:absolute;display:block;background:#E8E8E8;left:50%;margin-left:-0.5px;top:50%;margin-top:-6px;}
+.msg-strategy .top{padding-top:24px;padding-left:24px;padding-right:24px;}
+.top-inner{position:relative;padding-left:64px;}
+.title-icon-img{position:absolute;width:48px;height:48px;border-radius:50%;top:0;left:0;}
+.top-inner h4{font-size:16px;height:24px;line-height:24px;color:rgba(0,0,0,0.85);margin-bottom:12px;}
+.top-inner p{font-size:14px;color:rgba(0,0,0,0.45);line-height:22px;margin-bottom:6px;}
+.top-inner p:last-child{margin-bottom:0px;}
+.hideEle{width:1200px;overflow:hidden;margin-left:auto;margin-right:auto;}
+.strategy-edit{margin-bottom:36px;}
+.treatyForm .el-form-item__label{font-size:14px;color:rgba(0,0,0,0.85);line-height:14px;position:relative;margin-bottom:12px;padding:0;padding-left:8px;}
+.treatyForm .el-form-item__label:before{content:"";display:block;position:absolute;left:0;width:2px;height:10px;background:#2475FB;top:50%;margin-top:-5px;}
+.treatyForm.tan-mains .el-form-item{margin-bottom:32px;}
+.float-split .strategy-edit{float: left;width:50%;padding:0 10px;box-sizing: border-box;}
+.float-split{margin-left:-10px;margin-right: -10px;}
+/* .el-form-item__content{line-height: 1.0;} */
+.strategy .el-form.tan-mains .el-form-item{margin-bottom:32px;}
+.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before{
+	background:none;
+}
+.el-textarea__inner{border-radius: 2px;}
+.acountmanagement .el-table__body-wrapper .cell{overflow: hidden;text-overflow:ellipsis;white-space: nowrap; }
+.el-popover .el-button{ min-width: 66px;}
+.el-popover>p{margin-bottom:10px;}
+.treatyForm .el-input__icon{line-height: 32px;float: left;}
+.el-popover{    -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);word-break: break-all;}
+.tip-block{padding:20px;}
+.tip-block .one-d{font-size: 16px;line-height:16px;margin-bottom: 10px;position:relative;padding-left:100px;}
+.tip-block .two-d{font-size: 14px;line-height:24px;position:relative;padding-left:100px;}
+.tip-block p>span:first-child{font-size: 14px;font-weight:600;display: inline-block;width:100px;text-align: left;position:absolute;top:0;left:0;}
+.tip-block p>span:last-child{font-size: 12px;font-weight:400;color:#666;}
 </style>

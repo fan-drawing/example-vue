@@ -1,12 +1,11 @@
 <template>
-<div>
-  <div class="statisticslist">
-    <div class="statisticslist-tab">
+ <div class="statisticslist">
+    <div class="statisticscontract-tab">
       <ul class="clearfix">
         
-        <router-link to="/statistics/income" tag="li">全部任务</router-link>
-        <router-link to="/statistics/income?type=in" tag="li">买入</router-link>
-        <router-link to="/statistics/income?type=out" tag="li">买出</router-link>
+        <router-link to="/statistics" tag="li">全部</router-link>
+        <router-link to="/statistics?time=3" tag="li">近三个月</router-link>
+        <router-link to="/statistics?time=6" tag="li">近半年</router-link>
       </ul>
     </div>
 
@@ -71,18 +70,14 @@
       </el-pagination>
     </div>
   </div>
-  <statisticschart/>
-</div>
 </template>
 
-<script> 
-import statisticschart from "./statisticschart.vue"
+<script>
 export default {
-  name: 'statisticslist',
-  components:{statisticschart},
+  name: 'statisticscontract',
   data () {
     return {
-       tableData: [{
+      tableData: [{
           name: '账号名1',
           d1: '432.00',
           d2: '432.00',
@@ -200,8 +195,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.statisticslist-tab{height:44px;background:rgba(255,255,255,1);box-shadow:0px 2px 4px 0px rgba(0,0,0,0.08);padding-left:25px;margin-bottom: 24px;}
-.statisticslist-tab li{float: left;height:44px;line-height: 44px;padding:0 9px;margin-right: 32px;cursor: pointer;border-bottom: 1px solid transparent;}
-.statisticslist-tab li.active{color: #2475FB;border-bottom: 1px solid #2475FB;}
-.statisticslist-tab li:last-child{margin-right: 0px;}
+.statisticscontract-tab{margin-bottom:16px;}
+.statisticscontract-tab li{float:left;margin-right:12px;height:32px;padding:0 12px;line-height:32px;border-radius:2px;cursor:pointer;}
+.statisticscontract-tab li.active{background:rgba(22,22,24,0.08);}
 </style>
