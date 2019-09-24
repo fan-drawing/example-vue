@@ -104,7 +104,7 @@ export default {
           }
           this.instruments = (ceillData).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:2000});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -122,9 +122,10 @@ export default {
             };
           this.$post("/strategies/add",data).then(res=>{
             if(res.errno=='1'){
+              
               this.$emit('closeTan',res.data);
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:2000});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

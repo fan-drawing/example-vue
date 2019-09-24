@@ -75,14 +75,19 @@ export default {
         treaty:"",
       },
       // treatyData:[],
-      strategiesData:[],
+      // strategiesData:[],
       value: '',
       timeLine: ["2019-09-02 00:00:00", "2019-09-02 00:00:00"],
     }
   },
+  computed:{
+    //策略数据
+    strategiesData(){
+      return this.$store.getters.StrategiesSelect;
+    }
+  },
   mounted(){
     // this.getAllTreaty();
-    this.getAllStrategies();
     this.getAccountAll();
   },
   methods:{
@@ -119,31 +124,13 @@ export default {
           }
           this.accounts = (ceillData).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
       })
     },
-    getAllStrategies(){
-      this.$fetch('/strategies').then(res=>{
-        if(res.errno=="1"){
-          let data = res.data;
-          let ceillData = [];
-          for(let i=0;i<data.length;i++){
-            let objectCeill = {};
-            objectCeill.value = data[i].ID;
-            objectCeill.label = data[i].Name;
-            ceillData.push(objectCeill);
-          }
-          this.strategiesData = (ceillData).reverse();
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',type: 'warning'});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
-    },
+
 
     //添加 /tasks/add
     addTasks(){
@@ -158,7 +145,7 @@ export default {
             if(res.errno=='1'){
               this.$emit('closeTan',res.data);
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

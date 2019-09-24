@@ -73,7 +73,7 @@ export default {
             if(res.errno==='1'){
               this.$message({ message: "修改成功！！", type: 'success'});
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
             // console.log(res);
           })

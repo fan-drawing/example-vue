@@ -17,9 +17,10 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="risk" label="合约选择" class="strategy-edit">
-          <el-select v-model="stategyData.Instruments" multiple placeholder="请选择">
+          <el-select v-model="stategyData.Instruments" disabled multiple placeholder="请选择" style="width:260px;">
             <el-option
               v-for="item in instruments"
+              :value-key="item.value"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -69,20 +70,23 @@ export default {
           { required: true, message: '请输入最后交易日', trigger: 'blur' },
         ],
        },
-       stategyData:{},
+      //  stategyData:{},
        cities:cityOptions,
        checkedCities:"2",
        instruments:[],
     }
   },
   computed:{
+    stategyData(){
+      let dataCeill = this.stategyedit.ReditMsg;
+      dataCeill.Risk = parseFloat(dataCeill.Risk)*100;
+      this.checkedCities = dataCeill.Direction+"";
+      console.log(dataCeill)
+      return dataCeill;
+    }
   },
   mounted(){
     this.getAllTreaty();
-    let dataCeill = this.stategyedit.ReditMsg;
-    dataCeill.Risk = parseFloat(dataCeill.Risk)*100;
-    this.checkedCities = dataCeill.Direction+"";
-    this.stategyData = dataCeill;
   },
   methods:{
     close(){
@@ -101,7 +105,7 @@ export default {
           }
           this.instruments = (ceillData).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:2000});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -109,7 +113,6 @@ export default {
     },
     changeRadio(value){
       this.stategyData.Direction = value;
-      // console.log(value);
     },
     editReStrategy(formName){
       this.$refs[formName].validate((valid) => {
@@ -124,7 +127,9 @@ export default {
             };
           this.$post("/strategies/update",data).then(res=>{
             if(res.errno=='1'){
-              this.$emit('closeTan',{item:this.stategyData,index:this.stategyedit.editReIndex});
+              let data = res.data;
+              data.ID = this.stategyData.ID;
+              this.$emit('closeTan',{item:data,index:this.stategyedit.editReIndex});
             }else{
               if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
             }

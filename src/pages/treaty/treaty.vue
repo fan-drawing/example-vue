@@ -16,7 +16,7 @@
         </div>
         <div class="bottom-area-action clearfix">
           <el-popover
-            placement="top"
+            placement="bottom"
             width="160"
             v-model="item.visible">
             <p>确定删该合约吗？</p>
@@ -51,11 +51,17 @@ export default {
     return {
       openTan:false,
       openTanRedit:false,
-      treatyData:[],
+      // treatyData:[],
       reEdit:{
         ReditMsg:null,
         editReIndex:0,
       },
+    }
+  },
+  computed:{
+    treatyData(){
+      this.$store.dispatch("increment");
+      return this.$store.getters.getTreatyLists;
     }
   },
   filters:{
@@ -76,14 +82,13 @@ export default {
   methods:{
     closeTanActive(data){
       if(data instanceof Object){
-        this.treatyData.unshift(data);
+        this.$store.dispatch("addTreaty",data);
       }
       this.openTan = false;
     },
     closeTanReActive(data){
       if(data instanceof Object){
-        
-        this.treatyData.splice(data.index,1,data.item);
+        this.$store.dispatch("editSpliceTreaty",data);
       }
       this.openTanRedit = false;
     },
@@ -101,37 +106,15 @@ export default {
       
     },
     getTreatyList(){
-      this.$fetch('/instruments').then(res=>{
-        if(res.errno=="1"){
-          let data = res.data;
-          for(let i=0;i<data.length;i++){
-            data[i].visible = false;
-            data[i].BenchmarkPrice = (data[i].BenchmarkPrice).toString();
-            data[i].MarginLimit = (data[i].MarginLimit).toString();
-            data[i].PriceLimit = (data[i].PriceLimit).toString();
-          }
-          this.treatyData = (data).reverse();
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
+      this.$store.dispatch('getTreatyList');
     },
     addTreatyItem(){
       this.openTan = true;
     },
     deleteTreatySignal(item){
       let data ={instrumentID:item.ID};
-      this.$post('/instruments/del ',data).then(res=>{
-        if(res.errno=='1'){
-          this.treatyData.splice(this.searchListId(item),1);
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
+      let index = this.searchListId(item);
+      this.$store.dispatch("deleteTreaty",{data,index});
     },
     searchListId(selector){
       let ceillreturn = [];

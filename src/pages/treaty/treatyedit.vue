@@ -42,7 +42,7 @@
         <el-form-item prop="ExchangerName" label="上市交易所" class="strategy-edit" style="width:492px;">
           <el-input v-model="treatyData.ExchangerName" placeholder="请输入上市交易所"></el-input>
         </el-form-item>
-        <el-form-item prop="ExchangePrice" label="交易手续费" class="strategy-edit" style="margin-left:10px;">
+        <el-form-item prop="ExchangePrice" label="交易手续费" class="strategy-edit" style="margin-left:14px;">
           <el-input placeholder="请输入交易手续费" v-model="treatyData.ExchangePrice" style="">
             <template slot="append">%</template>
           </el-input>
@@ -137,7 +137,7 @@ export default {
             if(res.errno=='1'){
               this.$emit('closeTan',res.data);
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

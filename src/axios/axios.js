@@ -38,7 +38,7 @@ axios.interceptors.response.use(
       setTimeout(()=>{goType=true;},3000);
       router.push({
         path: '/login',
-        // query: {redirect: router.currentRoute.fullPath} //从哪个页面跳转
+        query: {redirect: router.currentRoute.fullPath} //从哪个页面跳转
       })
 
       
@@ -46,10 +46,19 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    Notification.error({
-      title: '错误',
-      message: '接口数连接用失败'
-    });
+    console.log(error.response)
+    if(error.response.status=="429"){
+      Notification({
+        title: '警告',
+        message: '操作过于频繁，请稍后！！'
+      });
+    }else{
+      Notification.error({
+        title: '错误',
+        message: '接口数连接用失败'
+      });
+    }
+    
     return Promise.reject(error.response.data)
   });
  

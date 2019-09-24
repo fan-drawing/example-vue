@@ -79,12 +79,20 @@ export default {
           if(res.errno==='1'){
             this.$message({
               message: '登陆成功',
-              type: 'success'
+              type: 'success',
+              duration:1000,
+              showClose:true,
+              offset:100,
             });
             this.$setCookie('umsg',res.data,(new Date()).valueOf()+1000*60*60*24,true);
-            this.$router.push({name:'quotations'})
+            if(this.$route.query.redirect!=undefined){
+              this.$router.push({path:this.$route.query.redirect});
+            }else{
+              this.$router.push({name:'quotations'});
+            }
+            
           }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
         }) 
       }

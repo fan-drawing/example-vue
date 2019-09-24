@@ -29,8 +29,8 @@
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item label="合约名称" v-if="props.row.InstrumentName!=null">
-                    <span>{{ props.row.InstrumentName.Name }}</span>
+                  <el-form-item label="合约名称" v-if="props.row.Instruments!=null">
+                    <span>{{((list)=>{let name = []; list.forEach((item)=>{name.push(item.Name)}); return name.join("、");})(props.row.Instruments)}}</span>
                   </el-form-item>
                   <el-form-item label="执行策略">
                     <span>{{ props.row.Strategy.Name }}</span>
@@ -48,60 +48,19 @@
             </el-table-column>
              <el-table-column
               prop="Name"
-              width="120"
               label="任务名称">
             </el-table-column>
             <el-table-column
-              width="120"
               label="合约名称">
               <template slot-scope="scope">
-                <el-popover
+                <!-- <el-popover
                   placement="bottom"
                   trigger="click">
-                    <div class="tip-block" v-loading="loading">
-                      <div v-if="InstrumentItem!=null">
-                        <!-- {{InstrumentItem}} -->
-                        <p class="one-d">
-                          <span>合约名称：</span>
-                          <span>{{InstrumentItem.Instrument}}</span>
-                        </p>
-                        <p class="two-d">
-                          <span>上市日期：</span>
-                          <span>{{InstrumentItem.Start|timeLines}}</span>
-                        </p>
-                        <p class="two-d">
-                          <span>最后交易日：</span>
-                          <span>{{InstrumentItem.End|timeLines}}</span>
-                        </p>
-                        <p class="two-d">
-                          <span>涨跌停限制：</span>
-                          <span>{{InstrumentItem.PriceLimit*100}}</span>
-                        </p>
-                        <p class="two-d">
-                          <span>上市交易所：</span>
-                          <span>{{InstrumentItem.ExchangerName}}%</span>
-                        </p> 
-                        <p class="two-d">
-                          <span>交易手续费：</span>
-                          <span>{{InstrumentItem.ExchangePrice*100}}%</span>
-                        </p>
-                        <p class="two-d">
-                          <span>交割手续费：</span>
-                          <span>{{InstrumentItem.Commission*100}}%</span>
-                        </p>
-                        <p class="two-d">
-                          <span>挂牌基准价：</span>
-                          <span>{{InstrumentItem.BenchmarkPrice}}</span>
-                        </p>
-                        <p class="two-d">
-                          <span>最低保证金：</span>
-                          <span>{{InstrumentItem.MarginLimit*100}}%</span>
-                        </p>
-                       
-                      </div>
-                    </div>
-                  <div v-if="scope.row.InstrumentName!=null" class="cell" style="cursor:pointer;" @click="getInstrumentItem(scope.row.InstrumentName.ID)" slot="reference">{{scope.row.InstrumentName.Name}}</div>
-                </el-popover>
+                    <el-table :data="scope.row.Instruments">
+                      <el-table-column width="150" property="Name" label="合约名称"></el-table-column>
+                    </el-table> -->
+                  <div v-if="scope.row.Instruments!=null" class="cell" style="cursor:pointer;" slot="reference">{{((list)=>{let name = []; list.forEach((item)=>{name.push(item.Name)}); return name.join("、");})(scope.row.Instruments)}}</div>
+                <!-- </el-popover> -->
               </template>
             </el-table-column>
             
@@ -109,8 +68,7 @@
               label="执行策略">
               <template slot-scope="scope">
                 <el-popover
-                  placement="right"
-                  width="400"
+                  placement="bottom"
                   trigger="click">
                     <div class="tip-block" v-loading="loading">
                       <div v-if="StrategyItem!=null">
@@ -146,9 +104,9 @@
               <template slot-scope="scope">
                 
                 <el-popover
-                  placement="right"
+                  placement="top"
                   trigger="hover">
-                  <el-table :data="scope.row.Accounts">
+                  <el-table :data="scope.row.Accounts" class="tan-table">
                     <el-table-column width="150" property="Account" label="账号名称"></el-table-column>
                   </el-table>
                   <div  slot="reference" class="cell">归属<em style="color:rgb(24, 144, 255);padding:0 5px;">{{scope.row.Accounts.length}}</em>个账号</div>
@@ -156,7 +114,6 @@
               </template>
             </el-table-column>
             <el-table-column
-              width="100"
               label="状态"
               :filters="[{ text: '未开始', value: '1' }, { text: '已开始', value: '2' }]"
               :filter-method="filterTag"
@@ -183,11 +140,12 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              show-overflow-tooltip>
+              width="200"
+              >
               <template slot-scope="scope">
                 <el-button v-if="scope.row.State=='1'" @click="tabTypeManage(scope.row,'0')" type="primary" class="signal">开始<i class="el-icon-caret-right el-icon--right"></i></el-button>
                 <el-button v-if="scope.row.State=='0'" @click="tabTypeManage(scope.row,'1')" type="warning" class="signal">结束<i class="el-icon--right el-icon-loading"></i></el-button>
-                <!-- <el-button v-if="scope.row.State=='2'" @click="tabTypeManage(scope.row,'1')" type="success" class="signal">结束<i class="el-icon--right el-icon-check"></i></el-button> -->
+                
                 <span class="split"></span>
                 <el-button class="edit-btn" style="cursor:not-allowed;">待定</el-button>
               </template>
@@ -268,21 +226,9 @@ export default {
     setnewData(){
       this.openTan = true;
     },
-    getInstrumentItem(ID){
-      this.loading = true;
+    getInstrumentItem(list){
       this.InstrumentItem = null;
       const data = {instrumentID:ID};
-      this.$post('/instruments',data).then(res=>{
-        if(res.errno=="1"){
-          this.InstrumentItem = res.data;
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
-        }
-        this.loading = false;
-      }).catch(error=>{
-        console.log(error);
-        this.loading = false;
-      })
     },
     getStrategyItem(ID){
       this.loading = true;
@@ -292,7 +238,7 @@ export default {
         if(res.errno=="1"){
           this.StrategyItem = res.data;
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
         this.loading = false;
       }).catch(error=>{
@@ -308,7 +254,7 @@ export default {
         if(res.errno=="1"){
           this.manageData[index].State = type;
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
         this.loading = false;
       }).catch(error=>{
@@ -325,7 +271,7 @@ export default {
           }
           this.manageData = (data).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -355,7 +301,7 @@ export default {
           })
           this.multipleSelections=[];
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);

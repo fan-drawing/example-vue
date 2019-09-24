@@ -1,6 +1,13 @@
 <template>
 <div class="header_inner clearfix">
-  <div class="logo-web"></div>
+  <div class="logo-web" :style="{'text-align': 'center',
+    'line-height': '50px',
+    'font-style': 'oblique',
+    'letter-spacing': '2px',
+    'font-size': '20px',
+    'font-weight': '600',
+    'text-shadow': '6px 4px 1px #e8dede',
+    'font-family': 'fantasy'}">logo待定</div>
   <ul class="clearfix nav-list">
     <router-link to="/index" class="link" tag="li">行情列表</router-link>
     <router-link to="/treaty" class="link" tag="li">合约管理</router-link>
@@ -42,16 +49,19 @@ export default {
     }
   },
   methods:{
+   
     quit(){
       this.$fetch("/sessions/quit").then(res=>{
           if(res.errno==='1'){
             this.$delCookie("umsg");
+            sessionStorage.removeItem("vuex");
             this.$router.push({name:'login'})
           }else{
-                if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
-              }
+            if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          }
         }) 
-    }
+    },
+    
   }
 }
 </script>

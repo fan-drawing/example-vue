@@ -231,4 +231,8 @@ html { overflow-y: scroll;}
 .tip-block .two-d{font-size: 14px;line-height:24px;position:relative;padding-left:100px;}
 .tip-block p>span:first-child{font-size: 14px;font-weight:600;display: inline-block;width:100px;text-align: left;position:absolute;top:0;left:0;}
 .tip-block p>span:last-child{font-size: 12px;font-weight:400;color:#666;}
+.el-form-item__content{line-height: 1.0;}
+.demo-table-expand .el-form-item__content{line-height:40px;}
+.tan-table.el-table td, .tan-table.el-table th{padding:4px 0;}
+.edit-tan .el-input__icon{line-height:32px;}
 </style>

@@ -143,6 +143,7 @@ export default {
               Commission:this.treatyData.Commission/100+"",
               BenchmarkPrice:this.treatyData.BenchmarkPrice+"",
               MarginLimit:this.treatyData.MarginLimit/100+"",
+              ID:this.treatyData.ID,
             };
           this.$post("/instruments/update",data).then(res=>{
             if(res.errno=='1'){
@@ -150,7 +151,7 @@ export default {
               data.ID = this.treatyData.ID;
               this.$emit('closeTan',{item:data,index:this.treatyData.editReIndex});
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

@@ -9,7 +9,7 @@
           <div class="top-inner">
             <img class="title-icon-img" src="@/assets/icon-img.png">
             <h4>{{item.Name}}</h4>  
-            <p>对冲风险敞口：{{(parseFloat(item.Risk)*100).toFixed(6)}}%</p>
+            <p>对冲风险敞口：{{(parseFloat(item.Risk)*100).toFixed(2)}}%</p>
             <p>操作方向：{{direction[item.Direction]}}</p>
             <p class="limit-line" :title="item.Description">描述：{{item.Description}}</p>
           </div>
@@ -17,7 +17,7 @@
         <div class="bottom-area-action clearfix">
           <!-- <a class="delete">删除策略</a> -->
           <el-popover
-            placement="top"
+            placement="bottom"
             width="160"
             v-model="item.visible">
             <p>确定删该策略吗？</p>
@@ -31,12 +31,13 @@
         </div>
     </div>
   </div>
-  <transition name="move">
-    <stategyedit  v-if="openTan" v-on:closeTan="closeTanActive"/>
-  </transition>
-  <transition name="move">
-    <stategyReedit  v-if="openTanRedit" v-on:closeTan="closeTanActiveRedit" :stategyedit="reEdit"/>
-  </transition>
+    <transition name="move">
+      <stategyedit  v-if="openTan" v-on:closeTan="closeTanActive"/>
+    </transition>
+    <transition name="move">
+      <stategyReedit  v-if="openTanRedit" v-on:closeTan="closeTanActiveRedit" :stategyedit="reEdit"/>
+    </transition>
+
   <!-- <stategyedit/> -->
 </div>
 </template>
@@ -61,7 +62,13 @@ export default {
         '1':'只多',
         '2':'双向',
       },
-      stategyData:[],
+    }
+  },
+  computed:{
+    
+    stategyData(){
+      this.$store.dispatch("increment");
+      return this.$store.getters.getStrategyLists;
     }
   },
   mounted(){
@@ -70,21 +77,20 @@ export default {
   methods:{
     closeTanActive(data){
       if(data instanceof Object){
-        this.stategyData.unshift(data);
+        this.$store.dispatch("addStategy",data);
       }
       this.openTan = false;
     },
     closeTanActiveRedit(data){
       if(data instanceof Object){
-        data.item.Risk = (parseFloat(data.item.Risk)/100).toFixed(6);
-        this.stategyData.splice(data.index,1,data.item);
+        this.$store.dispatch("editSpliceStategy",data);
       }
       this.openTanRedit = false;
     },
     edit(item){
       let itemCopy = JSON.parse(JSON.stringify(item));
+     
       itemCopy.Instruments = ((arr)=>{let a=[]; arr.forEach((item)=>{a.push(item.ID)}); return a;})(itemCopy.Instruments);
-      // console.log(itemCopy);return false;
       this.reEdit.ReditMsg = itemCopy;
       this.reEdit.editReIndex = this.searchListId(item);
       this.$nextTick(()=>{
@@ -93,6 +99,8 @@ export default {
       
     },
     getStategyList(){
+      this.$store.dispatch("getStategyList");
+      return false;
       this.$fetch('/strategies').then(res=>{
         if(res.errno=="1"){
           let data = res.data;
@@ -101,7 +109,7 @@ export default {
           }
           this.stategyData = (data).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -112,15 +120,8 @@ export default {
     },
     deleteStrategySignal(item){
       let data ={strategyID:item.ID};
-      this.$post('/strategies/del ',data).then(res=>{
-        if(res.errno=='1'){
-          this.stategyData.splice(this.searchListId(item),1);
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
+      let index = this.searchListId(item);
+      this.$store.dispatch("deleteStategy",{data,index});
     },
     searchListId(selector){
       let ceillreturn = [];

@@ -174,7 +174,7 @@ export default {
                   this.smsExpires();
                 })
               }else{
-                if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+                if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
               }
             }) 
           }
@@ -204,7 +204,7 @@ export default {
                       
               });
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
             // console.log(res);
           })

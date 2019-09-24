@@ -26,21 +26,6 @@ const router =  new Router({
   linkExactActiveClass: 'active',
   routes: [
     {
-      path:'/login',
-      name: 'login',
-      component: login
-    },
-    {
-      path:'/resign',
-      name: 'resign',
-      component: resign
-    },
-    {
-      path:'/password',
-      name: 'password',
-      component: password
-    },
-    {
       path:'/',
       name:'loginAfter',
       component:index,
@@ -117,6 +102,22 @@ const router =  new Router({
         }
       ]
     },
+    {
+      path:'/login',
+      name: 'login',
+      component: login
+    },
+    {
+      path:'/resign',
+      name: 'resign',
+      component: resign
+    },
+    {
+      path:'/password',
+      name: 'password',
+      component: password
+    },
+    
   ]
 });
 const rootLinks = ['login','resign','password']; 
@@ -125,10 +126,14 @@ router.beforeEach((to, from, next) => {
   // to: Route: 即将要进入的目标 路由对象
   // from: Route: 当前导航正要离开的路由
   // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
+  console.log(from)
   let umsg = getCookie("umsg",true);
   if(rootLinks.indexOf(to.name)===-1){
     if(umsg==null){
+      sessionStorage.removeItem("vuex");
       router.push({ name: 'login' });
+    }else{
+      
     }
   }
   next();

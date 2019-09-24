@@ -107,7 +107,7 @@ export default {
               msg.visible = false;
               this.$emit('closeTan',msg)
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

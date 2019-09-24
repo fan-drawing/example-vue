@@ -99,7 +99,7 @@ export default {
               this.accountData.CreateTime = res.data.UpdateTime;
               this.$emit('closeTanEdit',{data:this.accountData,index:this.itemIndex});
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

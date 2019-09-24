@@ -197,7 +197,7 @@ export default {
           }
           this.tableData = (data).reverse();
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -210,7 +210,7 @@ export default {
         if(res.errno=='1'){
           this.tableData.splice(this.searchListId(item),1);
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
@@ -234,7 +234,7 @@ export default {
           })
           this.multipleSelection=[];
         }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
       }).catch(error=>{
         console.log(error);
