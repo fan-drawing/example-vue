@@ -19,7 +19,6 @@ const actions = {
       context.commit('getTreatyList');
     },
     addTreaty(context,data){
-      console.log(data)
       context.commit('addTreaty',data);
     },
     deleteTreaty(context,{data,index}){
@@ -27,6 +26,21 @@ const actions = {
     },
     editSpliceTreaty(context,data){
       context.commit('editSpliceTreaty');
-    }
+    },
+       /*
+        任务管理
+    */
+    getManageList(context){
+      context.commit('getManageList');
+    },
+    deleteManage(context,{data,selectorDele}){
+      context.commit('deleteManage',{data,selectorDele});
+    },
+    tabTypeManage(context,{index,type}){
+      context.commit('tabTypeManage',{index,type});
+    },
+    addManage(context,data){
+      context.commit('getManageList');
+    },
 }
 export default actions;

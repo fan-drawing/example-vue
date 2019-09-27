@@ -78,17 +78,6 @@ export default {
   props:['treatyreedit'],
   data () {
     return {
-      // treatyData:{
-      //   Instrument:"IH1910",
-      //   Start:"",
-      //   End:"",
-      //   PriceLimit:123,
-      //   ExchangerName:"中金所",
-      //   ExchangePrice:0.25,
-      //   Commission:2.5,
-      //   BenchmarkPrice:4561.0,
-      //   MarginLimit:5
-      // },
       Start:"",
       End:"",
       rules:{

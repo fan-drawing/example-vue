@@ -8,10 +8,26 @@
     </div>
     
     <el-form :model="accountData" :label-position="'left'" label-width="100px" :rules="rules" ref="accountForm" class="tan-mains">
-      <el-form-item prop="Account" label="账户名称：" class="my-input-suffix">
+      <el-form-item prop="MarketServer" label="行情服务器" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入"
+            v-model="accountData.MarketServer">
+          </el-input>
+        </div>
+      </el-form-item>
+      <el-form-item prop="TradeServer" label="交易服务器" class="my-input-suffix">
+        <div>
+          <el-input
+            placeholder="请输入"
+            v-model="accountData.TradeServer">
+          </el-input>
+        </div>
+      </el-form-item>
+      <el-form-item prop="Account" label="交易账号" class="my-input-suffix">
+        <div>
+          <el-input
+            placeholder="请输入交易账号"
             v-model="accountData.Account">
           </el-input>
         </div>
@@ -25,18 +41,18 @@
           </el-input>
         </div>
       </el-form-item> -->
-      <el-form-item prop="BrokerName" label="经纪公司：" class="my-input-suffix">
+      <el-form-item prop="BrokerName" label="公司名称" class="my-input-suffix">
         <div>
           <el-input
-            placeholder="请输入公司"
+            placeholder="请输入公司名称"
             v-model="accountData.BrokerName">
           </el-input>
         </div>
       </el-form-item>
-      <el-form-item prop="BrokerID" label="公司代码：" class="my-input-suffix" style="margin-bottom:40px;">
+      <el-form-item prop="BrokerID" label="Broker ID" class="my-input-suffix" style="margin-bottom:40px;">
         <div>
           <el-input
-            placeholder="请输入公司ID"
+            placeholder="请输入Broker ID"
             v-model="accountData.BrokerID">
           </el-input>
         </div>
@@ -54,6 +70,7 @@ export default {
   props:['itemmsg','itemIndex'],
   computed:{
     accountData(){
+      console.log(this.itemmsg)
       return this.itemmsg;
     }
   },
@@ -62,6 +79,12 @@ export default {
       input1:"",
       
       rules:{
+        TradeServer:[
+          { required: true, message: '请输入交易服务器', trigger: 'blur' },
+        ],
+        MarketServer:[
+          { required: true, message: '请输入行情服务器', trigger: 'blur' },
+        ],
         Account:[
           { required: true, message: '请输入账户名称', trigger: 'blur' },
         ],
@@ -93,7 +116,14 @@ export default {
     sendAccount(formName){
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const data =  {"name": this.accountData.Account,"brokerName":this.accountData.BrokerName,"brokerID":this.accountData.BrokerID,"ID":this.accountData.ID+""}  
+          const data =  {
+            "name": this.accountData.Account,
+            "brokerName":this.accountData.BrokerName,
+            "brokerID":this.accountData.BrokerID,
+            "ID":this.accountData.ID+"",
+            "tradeServer":this.accountData.TradeServer,
+            "marketServer":this.accountData.MarketServer
+          }  
           this.$post("/accounts/update",data).then(res=>{
             if(res.errno==='1'){
               this.accountData.CreateTime = res.data.UpdateTime;

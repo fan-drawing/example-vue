@@ -5,6 +5,12 @@ const mutations = {
     increment (state) {
         state.uptime = new Date();
     },
+    baseCollocation(state){
+        mutations.getStategyList(state);
+        mutations.getTreatyList(state);
+        mutations.getManageList(state);
+    },
+    
     /*
         策略管理模块
         获取合约管理数据
@@ -90,9 +96,49 @@ const mutations = {
           })
     },
     editSpliceTreaty(state,data){
-        
         state.treatyData.data.splice(data.index,1,data.item);
-        
+    },
+
+    /*
+        任务管理
+    */
+   getManageList(state){
+       fetch('/tasks').then(res=>{
+            if(res.errno=="1"){
+                let data = res.data;
+                for(let i=0;i<data.length;i++){
+                    data[i].visible = false;
+                }
+                state.manageData.data = (data).reverse();
+            }else{
+                if(res.errmsg) Message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
+            }
+        }).catch(error=>{
+            console.log(error);
+        })
+    },
+    deleteManage(state,{data,selectorDele}){
+        post('/tasks/del ',data).then(res=>{
+            if(res.errno=='1'){
+                // state.manageData.data.splice(index,1);
+                let deli=0; //每次删除造成的差值
+                selectorDele.forEach((i)=>{
+                    state.manageData.data.splice(i-deli,1);
+                    deli++;
+                })
+                this.multipleSelections=[];
+            }else{
+              if(res.errmsg) Message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
+            }
+          }).catch(error=>{
+            console.log(error);
+          })
+    },
+    tabTypeManage(state,{index,type}){
+        state.manageData.data[index].State = type;
+    },
+    addManage(state,data){
+        state.manageData.data.unshift(data);
     },
 
 };

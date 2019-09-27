@@ -8,31 +8,37 @@
   <div class="table-block">
       <template>
         <el-table
-          :data="tableData"
+          :data="manageData"
           height="336"
           border
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="Name"
             label="任务名称"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="合约名称"
             width="180">
+            <template slot-scope="scope">
+                <div v-if="scope.row.Instruments!=null" class="cell" style="cursor:pointer;" slot="reference">{{((list)=>{let name = []; list.forEach((item)=>{name.push(item.Name)}); return name.join("、");})(scope.row.Instruments)}}</div>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="address"
             label="执行策略">
+            <template slot-scope="scope">
+                <div class="cell">{{scope.row.Strategy.Name}}</div>
+              </template>
           </el-table-column>
           <el-table-column
             width="100"
             label="状态 ">
             <template slot-scope="scope">
-              <i class="point-i" v-if="scope.row.status=='进行中'" :style="{width:'6px',height:'6px',background:'#1890FF'}"></i>
-              <i class="point-i" v-if="scope.row.status=='已结束'" :style="{width:'6px',height:'6px',background:'#FF4647'}"></i><span>{{scope.row.status}}</span>
-            </template>
+                <i class="point-i" v-if="scope.row.State=='1'" :style="{width:'6px',height:'6px',background:'rgba(24,144,255,1)'}"></i>
+                <i class="point-i" v-if="scope.row.State=='0'" :style="{width:'6px',height:'6px',background:'#E6A23C'}"></i>
+                <span v-if="scope.row.State=='1'">未开始</span>
+                <span v-if="scope.row.State=='0'">已开始</span>
+              </template>
           </el-table-column>
           <el-table-column
             label="价格趋势">
@@ -51,49 +57,15 @@ export default {
   name: 'quotationslist',
   data () {
     return {
-      tableData: [{
-          date: '任务1',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务2',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务3',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务4',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务5',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务6',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务7',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },{
-          date: '任务8',
-          name: 'IC1910',
-          address: '策略1：这里是一段描述',
-          status: '进行中',
-        },]
+      
     }
-  }
+  },
+  computed:{
+    manageData(){
+      this.$store.dispatch("increment");
+      return this.$store.getters.getManageList; 
+    }
+  },
 }
 </script>
 

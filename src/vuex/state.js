@@ -3,12 +3,14 @@ const state = {
     stategyData:{
         data:[],
         loading:'before',
-        uptime:'',
     },
     treatyData:{
         data:[],
         loading:'before',
-        uptime:'',
+    },
+    manageData:{
+        data:[],
+        loading:'before',
     }
 };
 

@@ -3,12 +3,12 @@
       <div class="functional-area">
         <div class="btn-area clearfix">
           <div class="left-area">
-            <el-button type="primary">全部开始<i class="el-icon-caret-right el-icon--right"></i></el-button>
+            <!-- <el-button type="primary">全部开始<i class="el-icon-caret-right el-icon--right"></i></el-button> -->
             <el-button  icon="el-icon-plus" @click="setnewData">新建</el-button>
             <el-button v-if="sortableOpen" :class="sortableOpen?'open':''" @click="deleteManagetSelect"  icon="el-icon-delete">删除</el-button>
           </div>
           <div class="right-area">
-            <el-button :class="sortableOpen?'open':''" @click="listItemSet">批量操作</el-button>
+            <el-button :class="sortableOpen?'open':''" @click="listItemSet">批量删除</el-button>
           </div>
         </div>
       </div>
@@ -53,14 +53,8 @@
             <el-table-column
               label="合约名称">
               <template slot-scope="scope">
-                <!-- <el-popover
-                  placement="bottom"
-                  trigger="click">
-                    <el-table :data="scope.row.Instruments">
-                      <el-table-column width="150" property="Name" label="合约名称"></el-table-column>
-                    </el-table> -->
                   <div v-if="scope.row.Instruments!=null" class="cell" style="cursor:pointer;" slot="reference">{{((list)=>{let name = []; list.forEach((item)=>{name.push(item.Name)}); return name.join("、");})(scope.row.Instruments)}}</div>
-                <!-- </el-popover> -->
+                
               </template>
             </el-table-column>
             
@@ -68,6 +62,7 @@
               label="执行策略">
               <template slot-scope="scope">
                 <el-popover
+                v-if="scope.row.Strategy"
                   placement="bottom"
                   trigger="click">
                     <div class="tip-block" v-loading="loading">
@@ -122,10 +117,8 @@
               <template slot-scope="scope">
                 <i class="point-i" v-if="scope.row.State=='1'" :style="{width:'6px',height:'6px',background:'rgba(24,144,255,1)'}"></i>
                 <i class="point-i" v-if="scope.row.State=='0'" :style="{width:'6px',height:'6px',background:'#E6A23C'}"></i>
-                <!-- <i class="point-i" v-if="scope.row.State=='2'" :style="{width:'6px',height:'6px',background:'rgba(255, 70, 71, 1)'}"></i> -->
                 <span v-if="scope.row.State=='1'">未开始</span>
                 <span v-if="scope.row.State=='0'">已开始</span>
-                <!-- <span v-if="scope.row.State=='2'">已结束</span> -->
               </template>
             </el-table-column>
             <el-table-column
@@ -182,7 +175,7 @@ export default {
       sortableOpen:false,
       pagesize: 10,
       currpage: 1,
-      manageData: [],
+      // manageData: [],
       multipleSelections: [],
       loading:false,
       openTan:false,
@@ -201,11 +194,14 @@ export default {
     }
   },
   computed:{
-    
+    manageData(){
+      this.$store.dispatch("increment");
+      return this.$store.getters.getManageList; 
+    }
   },
   components:{manageedit},
   mounted(){
-    this.getManageList();
+    this.$store.dispatch("getManageList");
   },
   methods:{
     handleCurrentChange(cpage) {
@@ -242,7 +238,6 @@ export default {
         }
         this.loading = false;
       }).catch(error=>{
-        console.log(error);
         this.loading = false;
       })
     },
@@ -250,9 +245,10 @@ export default {
     tabTypeManage(item,type){
       const data = {"taskID":item.ID, "state": type};
       const index = this.searchListId(item);
+      
       this.$post('/tasks/control',data).then(res=>{
         if(res.errno=="1"){
-          this.manageData[index].State = type;
+          this.$store.dispatch("tabTypeManage",{index,type});
         }else{
           if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
         }
@@ -261,25 +257,11 @@ export default {
         console.log(error);
         this.loading = false;
       })
-    },
-    getManageList(){
-      this.$fetch('/tasks').then(res=>{
-        if(res.errno=="1"){
-          let data = res.data;
-          for(let i=0;i<data.length;i++){
-            data[i].visible = false;
-          }
-          this.manageData = (data).reverse();
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
-    },
+    }, 
     closeTanActive(data){
       if(data instanceof Object){
-        this.manageData.unshift(data);
+        this.$store.dispatch("addManage",data);
+        // this.manageData.unshift(data);
       }
       this.openTan = false;
     },
@@ -291,21 +273,8 @@ export default {
       });
       let data ={taskID:selectDataId};
       let selectorDele = this.searchListId(list);
-
-      this.$post('/tasks/del',data).then(res=>{
-        if(res.errno=='1'){
-          let deli=0; //每次删除造成的差值
-          selectorDele.forEach((i)=>{
-            this.manageData.splice(i-deli,1);
-            deli++;
-          })
-          this.multipleSelections=[];
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
+      this.$store.dispatch("deleteManage",{data,selectorDele});
+      this.multipleSelections=[];
     },
     searchListId(selector){
       let ceillreturn = [];

@@ -8,7 +8,13 @@
     </div>
     <el-form :model="treatyData" :label-position="'top'" label-width="100px" :rules="rules" ref="treatyForm" class="tan-mains treatyForm">
       <el-form-item prop="Instrument" label="合约名称" class="strategy-edit biginput">
-        <el-input v-model="treatyData.Instrument" placeholder="请输入合约名称"></el-input>
+        <el-input v-model="treatyData.Instrument" placeholder="请输入合约名称" v-show="false"></el-input>
+          <el-autocomplete
+            v-model="querySelectItem"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入内容"
+            @select="handleSelect"
+          ></el-autocomplete>
       </el-form-item >
       <div class="float-split clearfix">
         <el-form-item prop="Start" label="上市日期" class="strategy-edit">
@@ -86,8 +92,9 @@ export default {
         ExchangePrice:0.25,
         Commission:2.5,
         BenchmarkPrice:4561.0,
-        MarginLimit:5
+        MarginLimit:5,
       },
+      querySelectItem:"",
       Start:"",
       End:"",
       rules:{
@@ -106,8 +113,14 @@ export default {
         Commission:[],
         BenchmarkPrice:[],
         MarginLimit:[],
+        restaurants:[],
+        stateSelect: '',
+        timeout:  null
       }
     }
+  },
+  mounted(){
+    this.getAllTreaty()
   },
   methods:{
     onStartDrug(val){
@@ -146,6 +159,39 @@ export default {
           }
         });
       
+    },
+    handleSelect(item) {
+      this.treatyData.Instrument = item.label;
+      // console.log(item);
+    },
+    createStateFilter(queryString) {
+      // console.log(queryString)
+      return (stateSelect) => {
+        return (stateSelect.value.indexOf(queryString) === 0);
+      };
+    },
+    querySearchAsync(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(results);
+        }, 2000 * Math.random());
+    },
+    getAllTreaty(){
+      this.$fetch("https://www.quantinfo.com/API/m/chart/config").then(res=>{
+        let ceill = [];
+
+        for(let x in res){
+          let obj = {};
+          obj.label = x;
+          obj.value = res[x][2];
+          ceill.push(obj)
+        }
+        // console.log(ceill)
+        this.restaurants = ceill;
+      })
     }
     
   }

@@ -65,14 +65,13 @@ export default {
     }
   },
   computed:{
-    
     stategyData(){
       this.$store.dispatch("increment");
       return this.$store.getters.getStrategyLists;
     }
   },
   mounted(){
-    this.getStategyList();
+    // this.getStategyList();
   },
   methods:{
     closeTanActive(data){
@@ -100,20 +99,6 @@ export default {
     },
     getStategyList(){
       this.$store.dispatch("getStategyList");
-      return false;
-      this.$fetch('/strategies').then(res=>{
-        if(res.errno=="1"){
-          let data = res.data;
-          for(let i=0;i<data.length;i++){
-            data[i].visible = false;
-          }
-          this.stategyData = (data).reverse();
-        }else{
-          if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
-        }
-      }).catch(error=>{
-        console.log(error);
-      })
     },
     addStategyItem(){
       this.openTan = true;

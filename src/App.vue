@@ -114,7 +114,7 @@ html { overflow-y: scroll;}
 .quotationslist .el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-track{border-radius: 10px; background-color:#fff;}
 .quotationslist .el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-thumb{border-radius: 3px;background:rgba(216,216,216,1);} 
 .quotationslist .el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-track-piece{background:#fff;}
-.quotationslist .el-table__body-wrapper,.quotationslist .el-table__header-wrapper{width:99.6%;padding-left:20px;padding-right:20px;box-sizing: border-box;}
+.quotationslist .el-table__body-wrapper,.quotationslist .el-table__header-wrapper{width:99.6%;box-sizing: border-box;}
 .quotationslist .el-table__body-wrapper .cell{font-size: 13px;color: #161618;}
 .point-i{display: inline-block;width:6px;height: 6px;border-radius: 3px;vertical-align: middle;margin-right: 6px;}
 .point-i + span{vertical-align: middle;}

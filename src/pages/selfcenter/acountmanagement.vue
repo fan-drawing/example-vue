@@ -4,7 +4,7 @@
       <div class="btn-area clearfix">
         <div class="left-area">
           <el-button icon="el-icon-plus" @click="setnewData">添加账号</el-button>
-          <el-button @click="listItemSet">批量操作</el-button>
+          <el-button @click="listItemSet">批量删除</el-button>
           <el-button v-if="sortableOpen" :class="sortableOpen?'open':''" @click="deleteAccountSelect"  icon="el-icon-delete">删除</el-button>
           
         </div>
@@ -51,9 +51,9 @@
               label="账户名">
             </el-table-column>
             <el-table-column
-              label="合约数量">
+              label="关联合约">
               <template slot-scope="scope">
-                <div class="cell">{{scope.row.Instruments.length}}</div>
+                <div class="cell">{{scope.row.Instruments|fiterName}}</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -141,6 +141,21 @@ export default {
       visible: false,
       editItem:null,
       editIndex:null,
+    }
+  },
+  filters:{
+    fiterName(value){
+      let a = [];
+      value.forEach(element => {
+        a.push(element.Name);
+        
+      });
+      if(a.length!=0){
+        return a.join("、");
+      }
+      return "暂无关联合约";
+       
+      
     }
   },
   components:{accountedit,accountreedit},

@@ -3,43 +3,44 @@
   <div class="shadow"></div>
   <div class="tan-block manage-edit">
     <div class="tan-header">
-      <h4>策略管理修改</h4>
+      <h4>策略管理</h4>
       <i class="el-icon-close tan-close" @click="close"></i>
     </div>
-     <el-form :model="stategyData" :label-position="'top'" :rules="rules" ref="stategyRForm" class="tan-mains">
+     <el-form :model="stategyData" :label-position="'top'" :rules="rules" ref="stategyForm" class="tan-mains">
       
-      <el-form-item prop="Name" label="策略名称" class="strategy-edit">
-        <el-input v-model="stategyData.Name" placeholder="请输入内容"></el-input>
+      <el-form-item prop="name" label="策略名称" class="strategy-edit">
+        <el-input v-model="stategyData.name" placeholder="请输入内容"></el-input>
       </el-form-item>
-      <el-form-item prop="Risk" label="对冲风险敞口" class="strategy-edit">
-        <el-input placeholder="请输入内容" v-model="stategyData.Risk" style="width:160px;">
+      <el-form-item prop="risk" label="对冲风险敞口" class="strategy-edit">
+        <el-input placeholder="请输入内容" v-model="stategyData.risk" style="width:160px;">
           <template slot="append">%</template>
         </el-input>
       </el-form-item>
       <el-form-item prop="risk" label="合约选择" class="strategy-edit">
-          <el-select v-model="stategyData.Instruments" disabled multiple placeholder="请选择" style="width:260px;">
+        
+          <el-select @change="heyueChange" v-model="stategyData.instruments" multiple placeholder="请选择">
             <el-option
               v-for="item in instruments"
-              :value-key="item.value"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
       </el-form-item>
-      <el-form-item prop="Direction" label="操作方向" class="strategy-edit">
-         <el-input v-model="stategyData.Direction" v-show="false"  placeholder="请输入内容"></el-input>
+      <el-form-item prop="direction" v-for="(item,index) in stategyData.instruments" :label="selectName(stategyData.instruments[index])+'操作方向'" class="strategy-edit"  :key="item">
+         <!-- <el-input v-model="stategyData.direction[index]" v-show="false"  placeholder="请输入内容"></el-input> -->
+         <!-- {{index}} -->
          <el-radio-group 
-          v-model="checkedCities"
+          v-model="stategyData.direction[index].check"
           @change="changeRadio"
           >
           <el-radio  v-for="city in cities" :label="city.value" :key="city.value">{{city.label}}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item prop="Description" label="策略描述" class="strategy-edit">
-        <el-input v-model="stategyData.Description" type="textarea" placeholder="请输入内容"></el-input>
+      <el-form-item prop="description" label="策略描述" class="strategy-edit">
+        <el-input v-model="stategyData.description" type="textarea" placeholder="请输入内容"></el-input>
       </el-form-item>
-      <el-button type="primary" class="addsure" @click="editReStrategy('stategyRForm')">确认修改</el-button>
+      <el-button type="primary" class="addsure" @click="addStrategy('stategyForm')">确认添加</el-button>
     </el-form>
   </div>
 </div>
@@ -48,40 +49,36 @@
 <script>
 const cityOptions = [{label:'双向',value:'2'}, {label:'只多',value:'1'},{label:'只空',value:'0'}];
 export default {
-  name: 'stategyReedit',
-  props:['stategyedit'],
+  name: 'stategyedit',
   data () {
     return {
-      
-       rules:{
-        Name:[
+      stategyData:{
+        name:'策略20191010', 
+        risk:0.5,  
+        direction:[2], 
+        instruments:[],
+        description:'冯爱国蓉儿爱个爱迪生给弄供热埃及sdfdfsg123454'
+      },
+      rules:{
+        name:[
            { required: true, message: '请输入策略名称', trigger: 'blur' },
         ],
-        Risk:[
+        risk:[
           { required: true, message: '请输入对冲风险敞口', trigger: 'blur' },
         ],
-        Instruments:[
+        instruments:[
           { required: true, message: '请选择合约', trigger: 'blur' },
         ],
-        Direction:[
+        direction:[
           { required: true, message: '请输入策略名称简介', trigger: 'blur' },
         ],
-        Description:[
+        description:[
           { required: true, message: '请输入最后交易日', trigger: 'blur' },
         ],
        },
-      //  stategyData:{},
-       cities:cityOptions,
-       checkedCities:"2",
        instruments:[],
-    }
-  },
-  computed:{
-    stategyData(){
-      let dataCeill = JSON.parse(JSON.stringify(this.stategyedit.ReditMsg));
-      dataCeill.Risk = parseFloat(dataCeill.Risk)*100;
-      this.checkedCities = dataCeill.Direction+"";
-      return dataCeill;
+       checkedCities:"2",
+       cities:cityOptions,
     }
   },
   mounted(){
@@ -90,6 +87,19 @@ export default {
   methods:{
     close(){
       this.$emit('closeTan',true)
+    },
+    heyueChange(value){
+      this.stategyData.direction=[];
+      value.forEach((item)=>{
+         this.stategyData.direction.push({ID:item,check:2});
+      })
+      console.log(this.stategyData.direction)
+      
+    },
+    changeRadio(value){
+      this.stategyData.direction = value;
+      this.stategyData.instruments
+      // console.log(value);
     },
     getAllTreaty(){
       this.$fetch('/instruments').then(res=>{
@@ -110,27 +120,31 @@ export default {
         console.log(error);
       })
     },
-    changeRadio(value){
-      this.stategyData.Direction = value;
+    selectName(ID){
+      let name ="";
+      (this.instruments).forEach((item)=>{
+        if(item.value==ID){
+          name = item.label;
+        }
+      })
+      return name;
     },
-    editReStrategy(formName){
+    addStrategy(formName){
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const data ={
-              ID:(this.stategyData.ID).toString(),
-              Name:this.stategyData.Name, 
-              Risk:(this.stategyData.Risk/100).toString(),  
-              Direction:(this.stategyData.Direction).toString()||"2", 
-              Description:(this.stategyData.Description).toString(),
-              Instruments:(this.stategyData.Instruments).join(',')
+              name:this.stategyData.name, 
+              risk:this.stategyData.risk/100+"",  
+              direction:this.stategyData.direction||"2", 
+              description:this.stategyData.description+"",
+              instruments:(this.stategyData.instruments).join(",")
             };
-          this.$post("/strategies/update",data).then(res=>{
+          this.$post("/strategies/add",data).then(res=>{
             if(res.errno=='1'){
-              let data = res.data;
-              data.ID = this.stategyData.ID;
-              this.$emit('closeTan',{item:data,index:this.stategyedit.editReIndex});
+              
+              this.$emit('closeTan',res.data);
             }else{
-              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning'});
+              if(res.errmsg) this.$message({ message: res.errmsg, type: 'warning',duration:1000,showClose:true,offset:100,});
             }
           }) 
           

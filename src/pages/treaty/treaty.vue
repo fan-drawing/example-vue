@@ -77,7 +77,7 @@ export default {
     }
   },
   mounted(){
-    this.getTreatyList();
+    // this.getTreatyList();
   },
   methods:{
     closeTanActive(data){

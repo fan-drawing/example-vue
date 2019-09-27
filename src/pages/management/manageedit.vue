@@ -22,17 +22,7 @@
           </el-option>
         </el-select>
       </div>
-      <!-- <div class="tan-in-group">
-        <p class="title-tan-group">合约选择</p>
-        <el-select v-model="formData.treaty" placeholder="请选择">
-          <el-option
-            v-for="item in treatyData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </div> -->
+    
       <div class="tan-in-group">
         <p class="title-tan-group">执行时间</p>
         <el-date-picker

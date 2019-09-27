@@ -46,6 +46,7 @@ export default {
     let cookieUsr = this.$getCookie("umsg",true);
     if(cookieUsr!=null){
       this.usr = cookieUsr;
+      this.$store.commit("baseCollocation");
     }
   },
   methods:{

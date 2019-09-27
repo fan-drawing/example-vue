@@ -8,7 +8,24 @@
     </div>
     
     <el-form :model="accountData" :label-position="'left'" label-width="100px" :rules="rules" ref="accountForm" class="tan-mains">
-      <el-form-item prop="name" label="账户名称：" class="my-input-suffix">
+      <el-form-item prop="marketServer" label="行情服务器" class="my-input-suffix">
+        <div>
+          <el-input
+            placeholder="请输入"
+            v-model="accountData.marketServer">
+          </el-input>
+        </div>
+      </el-form-item>
+      
+      <el-form-item prop="tradeServer" label="交易服务器" class="my-input-suffix">
+        <div>
+          <el-input
+            placeholder="请输入"
+            v-model="accountData.tradeServer">
+          </el-input>
+        </div>
+      </el-form-item>
+      <el-form-item prop="name" label="交易账号" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入"
@@ -16,17 +33,17 @@
           </el-input>
         </div>
       </el-form-item>
-      <el-form-item prop="password" label="账户密码：" class="my-input-suffix">
+      <el-form-item prop="password" label="交易密码" class="my-input-suffix">
         <div>
           <el-input
-            placeholder="请输入账户密码"
+            placeholder="请输入交易密码"
             show-password
             v-model="accountData.password">
           </el-input>
         </div>
       </el-form-item>
       
-      <el-form-item prop="brokerName" label="经纪公司：" class="my-input-suffix">
+      <el-form-item prop="brokerName" label="经纪公司" class="my-input-suffix">
         <div>
           <el-input
             placeholder="请输入公司"
@@ -34,10 +51,10 @@
           </el-input>
         </div>
       </el-form-item>
-      <el-form-item prop="brokerID" label="公司代码：" class="my-input-suffix" style="margin-bottom:40px;">
+      <el-form-item prop="brokerID" label="Broker ID" class="my-input-suffix" style="margin-bottom:40px;">
         <div>
           <el-input
-            placeholder="请输入公司ID"
+            placeholder="Broker ID"
             v-model="accountData.brokerID">
           </el-input>
         </div>
@@ -56,12 +73,20 @@ export default {
     return {
       input1:"",
       accountData:{
-        name:"146195",
+        tradeServer:"180.168.146.187:10111",
+        marketServer:"180.168.146.187:10101",
+        name:"149169",
         password:"xiashine",
         brokerName:"申银万国期货",
-        brokerID:"12345",
+        brokerID:"9999",
       },
       rules:{
+        tradeServer:[
+          { required: true, message: '请输入交易服务器', trigger: 'blur' },
+        ],
+        marketServer:[
+          { required: true, message: '请输入行情服务器', trigger: 'blur' },
+        ],
         name:[
           { required: true, message: '请输入账户名称', trigger: 'blur' },
         ],

@@ -36,6 +36,19 @@ const getters = {
   */
   getTreatyLists: state => {
     return state.treatyData.data;
+  },
+  /*
+    获取任务
+  */
+  getManageList:state=>{
+    return state.manageData.data;
+  },
+  getManageListSelect:state=>{
+    let ceill = JSON.parse(JSON.stringify(state.manageData.data));
+    for(let i=0;i<ceill.length;i++){
+      ceill[i].Index = i;
+    }
+    return ceill;
   }
 }
 
